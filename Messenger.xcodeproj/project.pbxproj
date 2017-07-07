@@ -7,19 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C945DF5C1F0F324000EF679A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945DF5B1F0F324000EF679A /* Extensions.swift */; };
 		C9C8E1D21F0F22CB0064EBF9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C8E1D11F0F22CB0064EBF9 /* AppDelegate.swift */; };
-		C9C8E1D41F0F22CB0064EBF9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C8E1D31F0F22CB0064EBF9 /* ViewController.swift */; };
 		C9C8E1D91F0F22CB0064EBF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9C8E1D81F0F22CB0064EBF9 /* Assets.xcassets */; };
-		C9C8E1DC1F0F22CB0064EBF9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9C8E1DA1F0F22CB0064EBF9 /* LaunchScreen.storyboard */; };
+		C9C8E1E41F0F2C060064EBF9 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C8E1E31F0F2C060064EBF9 /* FriendCell.swift */; };
+		C9C8E1E81F0F2C850064EBF9 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C8E1E71F0F2C850064EBF9 /* FriendsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C945DF5B1F0F324000EF679A /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Extensions/Extensions.swift; sourceTree = "<group>"; };
 		C9C8E1CE1F0F22CB0064EBF9 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C8E1D11F0F22CB0064EBF9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C9C8E1D31F0F22CB0064EBF9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C9C8E1D81F0F22CB0064EBF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C9C8E1DB1F0F22CB0064EBF9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C9C8E1DD1F0F22CB0064EBF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9C8E1E31F0F2C060064EBF9 /* FriendCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FriendCell.swift; path = Views/FriendCell.swift; sourceTree = "<group>"; };
+		C9C8E1E71F0F2C850064EBF9 /* FriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FriendsViewController.swift; path = Controllers/FriendsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +35,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C945DF5A1F0F31DB00EF679A /* Helps */ = {
+			isa = PBXGroup;
+			children = (
+				C945DF5B1F0F324000EF679A /* Extensions.swift */,
+			);
+			name = Helps;
+			sourceTree = "<group>";
+		};
 		C9C8E1C51F0F22CB0064EBF9 = {
 			isa = PBXGroup;
 			children = (
@@ -53,12 +63,29 @@
 			isa = PBXGroup;
 			children = (
 				C9C8E1D11F0F22CB0064EBF9 /* AppDelegate.swift */,
-				C9C8E1D31F0F22CB0064EBF9 /* ViewController.swift */,
+				C9C8E1E51F0F2C090064EBF9 /* Views */,
+				C9C8E1E61F0F2C180064EBF9 /* Controllers */,
+				C945DF5A1F0F31DB00EF679A /* Helps */,
 				C9C8E1D81F0F22CB0064EBF9 /* Assets.xcassets */,
-				C9C8E1DA1F0F22CB0064EBF9 /* LaunchScreen.storyboard */,
 				C9C8E1DD1F0F22CB0064EBF9 /* Info.plist */,
 			);
 			path = Messenger;
+			sourceTree = "<group>";
+		};
+		C9C8E1E51F0F2C090064EBF9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C9C8E1E31F0F2C060064EBF9 /* FriendCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		C9C8E1E61F0F2C180064EBF9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C9C8E1E71F0F2C850064EBF9 /* FriendsViewController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,7 +147,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9C8E1DC1F0F22CB0064EBF9 /* LaunchScreen.storyboard in Resources */,
 				C9C8E1D91F0F22CB0064EBF9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,23 +158,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9C8E1D41F0F22CB0064EBF9 /* ViewController.swift in Sources */,
+				C9C8E1E81F0F2C850064EBF9 /* FriendsViewController.swift in Sources */,
+				C9C8E1E41F0F2C060064EBF9 /* FriendCell.swift in Sources */,
 				C9C8E1D21F0F22CB0064EBF9 /* AppDelegate.swift in Sources */,
+				C945DF5C1F0F324000EF679A /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C9C8E1DA1F0F22CB0064EBF9 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C9C8E1DB1F0F22CB0064EBF9 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C9C8E1DE1F0F22CB0064EBF9 /* Debug */ = {
@@ -289,6 +306,7 @@
 				C9C8E1E21F0F22CB0064EBF9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
