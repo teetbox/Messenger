@@ -1,5 +1,5 @@
 //
-//  Extensions.swift
+//  UIView+AddConstraints.swift
 //  Messenger
 //
 //  Created by Matt Tian on 7/7/17.
@@ -23,4 +23,3 @@ extension UIView {
     }
     
 }
-

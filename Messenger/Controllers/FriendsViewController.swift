@@ -12,12 +12,16 @@ class FriendsViewController: UICollectionViewController {
     
     let friendCellId = "friendCell"
     
+    var messages: [Message]?
+    
     override func viewDidLoad() {
         navigationItem.title = "Friends"
         
         collectionView?.register(FriendCell.self, forCellWithReuseIdentifier: friendCellId)
         
         setupCollectionView()
+        
+        setupData()
     }
     
     private func setupCollectionView() {
@@ -26,11 +30,14 @@ class FriendsViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return messages?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: friendCellId, for: indexPath) as! FriendCell
+        
+        cell.message = messages?[indexPath.item]
+        
         return cell
     }
     
@@ -40,6 +47,10 @@ extension FriendsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 100)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
 }
