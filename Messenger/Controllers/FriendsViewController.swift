@@ -41,6 +41,15 @@ class FriendsViewController: UICollectionViewController {
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let layout = UICollectionViewFlowLayout()
+        let chatLogsViewController = ChatLogsViewController(collectionViewLayout: layout)
+        
+        chatLogsViewController.friend = messages?[indexPath.item].friend
+        
+        navigationController?.pushViewController(chatLogsViewController, animated: true)
+    }
+    
 }
 
 extension FriendsViewController: UICollectionViewDelegateFlowLayout {
