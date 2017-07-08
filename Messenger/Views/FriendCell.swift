@@ -35,10 +35,20 @@ class FriendCell: BaseCell {
             nameLabel.text = message?.friend?.name
             messageLabel.text = message?.text
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "h:mm a"
-            
             if let date = message?.date {
+                let dateFormatter = DateFormatter()
+                
+                let interval = Date().timeIntervalSince(date)
+                let dayInterval: TimeInterval = 24 * 60 * 60
+                
+                if interval > 7 * dayInterval {
+                    dateFormatter.dateFormat = "MM/dd/yy"
+                } else if interval > dayInterval {
+                    dateFormatter.dateFormat = "EEE"
+                } else {
+                    dateFormatter.dateFormat = "h:mm a"
+                }
+            
                 dateLabel.text = dateFormatter.string(from: date)
             }
         }

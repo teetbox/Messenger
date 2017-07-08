@@ -18,8 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-
-        window?.rootViewController = UINavigationController(rootViewController: FriendsViewController(collectionViewLayout: UICollectionViewFlowLayout()))
+        window?.rootViewController = TabBarViewController()
         
         return true
     }

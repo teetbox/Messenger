@@ -62,9 +62,17 @@ extension FriendsViewController {
         
         createMessage("I'm very very rich.", friend: trump, minutesAge: 0, context: context)
         
+        let gandhi = Friend(context: context)
+        gandhi.name = "Mahatma Gandhi"
+        gandhi.profileImageName = "gandhi"
+        
+        createMessage("Love, Peace and Joy", friend: gandhi, minutesAge: 1 * 24 * 60, context: context)
+        
         let hillary = Friend(context: context)
         hillary.name = "Hillary Clinton"
         hillary.profileImageName = "hillary_profile"
+        
+        createMessage("Vote for me", friend: hillary, minutesAge: 8 * 24 * 60, context: context)
     }
     
     private func createMessage(_ text: String, friend: Friend, minutesAge: Double, context: NSManagedObjectContext) {

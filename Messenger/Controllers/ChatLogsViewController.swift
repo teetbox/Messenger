@@ -14,7 +14,7 @@ class ChatLogsViewController: UICollectionViewController {
     var messages: [Message]?
     
     let chatCellId = "chatCellId"
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
