@@ -141,7 +141,7 @@ class FriendCell: BaseCell {
         containerView.addSubview(messageLabel)
         containerView.addSubview(hasReadImageView)
         
-        containerView.addConstraints("H:|[v0][v1(60)]|", for: nameLabel, dateLabel)
+        containerView.addConstraints("H:|[v0][v1(64)]|", for: nameLabel, dateLabel)
         containerView.addConstraints("V:|[v0][v1(24)]", for: nameLabel, messageLabel)
         containerView.addConstraints("H:|[v0]-8-[v1(20)]|", for: messageLabel, hasReadImageView)
         containerView.addConstraints("V:|[v0(24)]", for: dateLabel)

@@ -46,12 +46,13 @@ class ChatCell: BaseCell {
     let rightBubbleImage = UIImage(named: "bubble_blue")!.resizableImage(withCapInsets: UIEdgeInsets(top: 22, left: 26, bottom: 22, right: 26))
     
     override func setupViews() {
+        
         addSubview(bubbleImageView)
         addSubview(messageTextView)
         addSubview(profileImageView)
         
         addConstraints("H:|-8-[v0(30)]", for: profileImageView)
-        addConstraints("V:[v0(30)]|", for: profileImageView)
+        addConstraints("V:[v0(30)]-4-|", for: profileImageView)
     }
     
 }

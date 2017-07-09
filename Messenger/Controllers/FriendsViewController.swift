@@ -24,6 +24,12 @@ class FriendsViewController: UICollectionViewController {
         setupData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setupCollectionView() {
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
