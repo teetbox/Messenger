@@ -13,21 +13,45 @@ class ChatCell: BaseCell {
     var message: Message? {
         didSet {
             messageTextView.text = message?.text
+            
+            if let imageName = message?.friend?.profileImageName {
+                profileImageView.image = UIImage(named: imageName)
+            }
         }
     }
     
     let messageTextView: UITextView = {
         let textView = UITextView()
         textView.text = "Good morning"
-        textView.backgroundColor = UIColor(white: 0.5, alpha: 0.1)
+        textView.font = UIFont.systemFont(ofSize: 18)
+        textView.isEditable = false
+        textView.backgroundColor = UIColor.clear
         return textView
     }()
     
+    let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 15
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    let bubbleImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
+    
+    let leftBubbleImage = UIImage(named: "bubble_gray")!.resizableImage(withCapInsets: UIEdgeInsets(top: 22, left: 26, bottom: 22, right: 26))
+    let rightBubbleImage = UIImage(named: "bubble_blue")!.resizableImage(withCapInsets: UIEdgeInsets(top: 22, left: 26, bottom: 22, right: 26))
+    
     override func setupViews() {
+        addSubview(bubbleImageView)
         addSubview(messageTextView)
+        addSubview(profileImageView)
         
-        addConstraints("H:|[v0]|", for: messageTextView)
-        addConstraints("V:|[v0]|", for: messageTextView)
+        addConstraints("H:|-8-[v0(30)]", for: profileImageView)
+        addConstraints("V:[v0(30)]|", for: profileImageView)
     }
     
 }

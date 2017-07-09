@@ -10,6 +10,7 @@
 		C909FB6A1F109AA200C824AC /* ChatLogsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C909FB691F109AA200C824AC /* ChatLogsViewController.swift */; };
 		C909FB6C1F10A12F00C824AC /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C909FB6B1F10A12F00C824AC /* ChatCell.swift */; };
 		C909FB6E1F10DA8F00C824AC /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C909FB6D1F10DA8F00C824AC /* TabBarViewController.swift */; };
+		C95FC4241F123705009A293D /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FC4231F123705009A293D /* UIColor+RGB.swift */; };
 		C9C364AB1F0FD95700DA367D /* Messenger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C9C364A91F0FD95700DA367D /* Messenger.xcdatamodeld */; };
 		C9C364B11F0FDA4100DA367D /* Message+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C364AD1F0FDA4100DA367D /* Message+CoreDataClass.swift */; };
 		C9C364B21F0FDA4100DA367D /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C364AE1F0FDA4100DA367D /* Message+CoreDataProperties.swift */; };
@@ -28,6 +29,7 @@
 		C909FB691F109AA200C824AC /* ChatLogsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatLogsViewController.swift; path = Controllers/ChatLogsViewController.swift; sourceTree = "<group>"; };
 		C909FB6B1F10A12F00C824AC /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatCell.swift; path = Views/ChatCell.swift; sourceTree = "<group>"; };
 		C909FB6D1F10DA8F00C824AC /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabBarViewController.swift; path = Controllers/TabBarViewController.swift; sourceTree = "<group>"; };
+		C95FC4231F123705009A293D /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+RGB.swift"; path = "Helps/UIColor+RGB.swift"; sourceTree = "<group>"; };
 		C9C364AA1F0FD95700DA367D /* Messenger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Messenger.xcdatamodel; sourceTree = "<group>"; };
 		C9C364AD1F0FDA4100DA367D /* Message+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataClass.swift"; path = "Models/Message+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C9C364AE1F0FDA4100DA367D /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "Models/Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				C9C364DA1F0FDCEF00DA367D /* LaunchUntility.swift */,
 				C9C364B51F0FDB1300DA367D /* CoreDataManager.swift */,
 				C9C364B71F0FDB4000DA367D /* UIView+AddConstraints.swift */,
+				C95FC4231F123705009A293D /* UIColor+RGB.swift */,
 			);
 			name = Helps;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C8E1E81F0F2C850064EBF9 /* FriendsViewController.swift in Sources */,
+				C95FC4241F123705009A293D /* UIColor+RGB.swift in Sources */,
 				C9C364B31F0FDA4100DA367D /* Friend+CoreDataClass.swift in Sources */,
 				C9C364B41F0FDA4100DA367D /* Friend+CoreDataProperties.swift in Sources */,
 				C909FB6A1F109AA200C824AC /* ChatLogsViewController.swift in Sources */,

@@ -54,6 +54,15 @@ class FriendCell: BaseCell {
         }
     }
     
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? UIColor.rgb(0, 137, 249) : .white
+            nameLabel.textColor = isHighlighted ? .white : .black
+            dateLabel.textColor = isHighlighted ? .white : .black
+            messageLabel.textColor = isHighlighted ? .white : .darkGray
+        }
+    }
+    
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "zuckprofile")
