@@ -7,17 +7,11 @@
 //
 
 import UIKit
+import CoreData
 
 class ChatLogsViewController: UICollectionViewController {
     
-    var friend: Friend? {
-        didSet {
-            if let _messages = friend?.messages?.allObjects as? [Message] {
-                messages = _messages.sorted { $0.date! < $1.date! }
-            }
-        }
-    }
-    var messages: [Message]?
+    var friend: Friend?
     
     let chatCellId = "chatCellId"
     
@@ -39,18 +33,23 @@ class ChatLogsViewController: UICollectionViewController {
         return textField
     }()
     
-    let sendButton: UIButton = {
-        let button = UIButton()
+    lazy var sendButton: UIButton = {
+        let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.setTitleColor(UIColor.rgb(0, 137, 249), for: .normal)
+        button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let simulateButton = UIBarButtonItem(title: "Simulate", style: .plain, target: self, action: #selector(handleSimulate))
+        
         navigationItem.title = friend?.name
+        navigationItem.rightBarButtonItem = simulateButton
+        
         tabBarController?.tabBar.isHidden = true
         
         collectionView?.backgroundColor = .white
@@ -61,6 +60,8 @@ class ChatLogsViewController: UICollectionViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        performFetch()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -91,8 +92,30 @@ class ChatLogsViewController: UICollectionViewController {
         inputContainerView.addConstraints("V:|[v0]|", for: sendButton)
     }
     
+    func handleSimulate() {
+        let newMessage = Message(context: context)
+        newMessage.text = "I agree with you!"
+        newMessage.friend = friend
+        newMessage.isSender = false
+        newMessage.date = Date()
+
+        CoreDataManager.shared.saveContext()
+    }
+    
+    func handleSend() {
+        let newMessage = Message(context: context)
+        newMessage.text = inputTextField.text
+        newMessage.friend = friend
+        newMessage.isSender = true
+        newMessage.date = Date()
+        
+        CoreDataManager.shared.saveContext()
+        
+        inputTextField.text = nil
+    }
+    
     func handleKeyboardNotification(notification: Notification) {
-        let isKeyboardShowing = notification.name == NSNotification.Name.UIKeyboardWillShow
+        let isKeyboardShowing = (notification.name == NSNotification.Name.UIKeyboardWillShow)
         
         if let userInfo = notification.userInfo {
             if let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
@@ -104,7 +127,8 @@ class ChatLogsViewController: UICollectionViewController {
                     
                 }, completion: { _ in
                     if isKeyboardShowing {
-                        let indexPath = IndexPath(item: self.messages!.count - 1, section: 0)
+                        let count = self.frc.fetchedObjects?.count ?? 0
+                        let indexPath = IndexPath(item: count - 1, section: 0)
                         self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                     }
                 })
@@ -112,17 +136,44 @@ class ChatLogsViewController: UICollectionViewController {
         }
     }
     
+    lazy var frc: NSFetchedResultsController<NSFetchRequestResult> = {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Message")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "friend.name == %@", self.friend!.name!)
+        let _frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        _frc.delegate = self
+        return _frc
+    }()
+    
+    lazy var context: NSManagedObjectContext = {
+        return CoreDataManager.shared.viewContext
+    }()
+    
+    func performFetch() {
+        do {
+            try frc.performFetch()
+        } catch let error {
+            NSLog("Core Data FRC Error: \(error)")
+        }
+    }
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return frc.sections?.count ?? 0
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages?.count ?? 0
+        return frc.sections?[section].numberOfObjects ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: chatCellId, for: indexPath) as! ChatCell
         
-        let message = messages?[indexPath.item]
+        let message = frc.object(at: indexPath) as! Message
+        let isSender = message.isSender
+        
         cell.message = message
         
-        if let messageText = message?.text, let isSender = message?.isSender {
+        if let messageText = message.text {
             let size = CGSize(width: 220, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             
@@ -157,7 +208,9 @@ extension ChatLogsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if let messageText = messages?[indexPath.item].text {
+        let message = frc.object(at: indexPath) as! Message
+        
+        if let messageText = message.text {
             let size = CGSize(width: 220, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             
@@ -171,6 +224,30 @@ extension ChatLogsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+    }
+    
+}
+
+extension ChatLogsViewController: NSFetchedResultsControllerDelegate {
+    
+    func updateFromBatch() {
+        print(#function)
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView?.performBatchUpdates(performFetch) { (_) in
+            self.updateFromBatch()
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            collectionView?.insertItems(at: [newIndexPath!])
+            collectionView?.scrollToItem(at: newIndexPath!, at: .bottom, animated: true)
+        default:
+            break
+        }
     }
     
 }
