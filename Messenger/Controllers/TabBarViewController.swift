@@ -24,9 +24,12 @@ class TabBarViewController: UITabBarController {
     }
     
     private func createDummyTabBarItem(title: String, imageName: String) -> UINavigationController {
-        let navController = UINavigationController(rootViewController: UIViewController())
-        navController.tabBarItem.title = title
-        navController.tabBarItem.image = UIImage(named: imageName)
+        let viewController = UIViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        viewController.tabBarItem.title = title
+        viewController.tabBarItem.image = UIImage(named: imageName)
+        viewController.navigationItem.title = title
+        viewController.view.backgroundColor = .white
         return navController
     }
     

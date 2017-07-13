@@ -18,7 +18,6 @@ extension FriendsViewController {
     func setupData() {
         clearData()
         createData()
-        loadData()
     }
     
     private func clearData() {
@@ -86,7 +85,7 @@ extension FriendsViewController {
         message.date = Date().addingTimeInterval(-minutesAge * 60)
     }
     
-    private func loadData() {
+    func loadData() {
         let friendRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Friend")
         let messageRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Message")
         messageRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]

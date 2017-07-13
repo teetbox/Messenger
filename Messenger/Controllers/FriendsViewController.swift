@@ -28,6 +28,10 @@ class FriendsViewController: UICollectionViewController {
         super.viewWillAppear(animated)
         
         tabBarController?.tabBar.isHidden = false
+        
+        loadData()
+        
+        collectionView?.reloadData()
     }
     
     private func setupCollectionView() {

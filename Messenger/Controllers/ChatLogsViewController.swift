@@ -14,6 +14,7 @@ class ChatLogsViewController: UICollectionViewController {
     var friend: Friend?
     
     let chatCellId = "chatCellId"
+    //    let charHeaderId = "charHeaderId"
     
     let inputContainerView: UIView = {
         let view = UIView()
@@ -45,16 +46,17 @@ class ChatLogsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let simulateButton = UIBarButtonItem(title: "Simulate", style: .plain, target: self, action: #selector(handleSimulate))
-        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleAdd))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(handleDelete))
         navigationItem.title = friend?.name
-        navigationItem.rightBarButtonItem = simulateButton
+        navigationItem.rightBarButtonItems = [addButton, deleteButton]
         
         tabBarController?.tabBar.isHidden = true
         
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(ChatCell.self, forCellWithReuseIdentifier: chatCellId)
+        //        collectionView?.register(ChatHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: charHeaderId)
         
         setupInputViews()
         
@@ -92,14 +94,27 @@ class ChatLogsViewController: UICollectionViewController {
         inputContainerView.addConstraints("V:|[v0]|", for: sendButton)
     }
     
-    func handleSimulate() {
-        let newMessage = Message(context: context)
-        newMessage.text = "I agree with you!"
-        newMessage.friend = friend
-        newMessage.isSender = false
-        newMessage.date = Date()
-
+    func handleAdd() {
+        let message1 = Message(context: context)
+        message1.text = "I agree with you"
+        message1.friend = friend
+        message1.isSender = false
+        message1.date = Date()
+        
+        let message2 = Message(context: context)
+        message2.text = "Come on"
+        message2.friend = friend
+        message2.isSender = false
+        message2.date = Date()
+        
         CoreDataManager.shared.saveContext()
+    }
+    
+    func handleDelete() {
+        if let message = frc.fetchedObjects?[frc.fetchedObjects!.count - 1] as? NSManagedObject {
+            context.delete(message)
+            CoreDataManager.shared.saveContext()
+        }
     }
     
     func handleSend() {
@@ -149,6 +164,8 @@ class ChatLogsViewController: UICollectionViewController {
         return CoreDataManager.shared.viewContext
     }()
     
+    var blockOperations = [BlockOperation]()
+    
     func performFetch() {
         do {
             try frc.performFetch()
@@ -164,6 +181,15 @@ class ChatLogsViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return frc.sections?[section].numberOfObjects ?? 0
     }
+    
+    //    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    //        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: charHeaderId, for: indexPath) as! ChatHeaderView
+    //
+    //        view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
+    //        view.backgroundColor = .blue
+    //
+    //        return view
+    //    }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: chatCellId, for: indexPath) as! ChatCell
@@ -230,23 +256,72 @@ extension ChatLogsViewController: UICollectionViewDelegateFlowLayout {
 
 extension ChatLogsViewController: NSFetchedResultsControllerDelegate {
     
-    func updateFromBatch() {
-        print(#function)
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        blockOperations.removeAll()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView?.performBatchUpdates(performFetch) { (_) in
-            self.updateFromBatch()
+        
+        collectionView?.performBatchUpdates({
+            for operation in self.blockOperations {
+                operation.start()
+            }
+        }, completion: { _ in
+            let lastIndex = self.frc.sections![0].numberOfObjects - 1
+            if lastIndex >= 0 {
+                let indexPath = IndexPath(item: lastIndex, section: 0)
+                self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
+            }
+            
+            self.blockOperations.removeAll()
+        })
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        
+        switch type {
+        case .insert:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.insertSections(IndexSet([sectionIndex]))
+            }))
+            
+        case .update:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.reloadSections(IndexSet([sectionIndex]))
+            }))
+            
+        case .delete:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.deleteSections(IndexSet([sectionIndex]))
+            }))
+            
+        default:
+            break
         }
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
         switch type {
         case .insert:
-            collectionView?.insertItems(at: [newIndexPath!])
-            collectionView?.scrollToItem(at: newIndexPath!, at: .bottom, animated: true)
-        default:
-            break
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.insertItems(at: [newIndexPath!])
+            }))
+            
+        case .update:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.reloadItems(at: [indexPath!])
+            }))
+            
+        case .move:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.moveItem(at: indexPath!, to: newIndexPath!)
+            }))
+            
+        case .delete:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                self?.collectionView?.deleteItems(at: [indexPath!])
+            }))
         }
     }
     
